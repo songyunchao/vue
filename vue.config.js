@@ -7,7 +7,7 @@ function resolve(dir) {
 }
 
 const name = defaultSettings.title || 'vue Admin Template' // page title
-const port = 9528 // dev port
+const port = 9528// dev port
 
 // All configuration item explanations can be find in https://cli.vuejs.org/config/
 module.exports = {
@@ -37,8 +37,8 @@ module.exports = {
       // target: `https://easy-mock.com/mock/5ccf954b2b501c404c540949/wfz`,
       // target: `http://localhost:${port}/mock`,
       [process.env.VUE_APP_BASE_API]: {
-
-        target: `https://easy-mock.com/mock/5ccf954b2b501c404c540949/wfz`,
+        target: `http://10.10.23.124:8080/dev-api`,
+        // target: `https://easy-mock.com/mock/5ccf954b2b501c404c540949/wfz`,
         changeOrigin: true,
         pathRewrite: {
           ['^' + process.env.VUE_APP_BASE_API]: ''

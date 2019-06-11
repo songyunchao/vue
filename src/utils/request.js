@@ -14,7 +14,13 @@ const service = axios.create({
 service.interceptors.request.use(
   config => {
     // do something before request is sent
-
+    if(config.url=='/user/login'){
+      config.url = config.url + ("?client_name=rest&username="+  config.data.username +"&password="+ config.data.password)
+    }else if (config.url=='/user/logout'){
+      config.url = config.url + ("?client_name=jwt")
+    }else{
+      config.url = config.url + ("?client_name=jwt")
+    }
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
@@ -44,17 +50,16 @@ service.interceptors.response.use(
    */
   response => {
     const res = response.data
-
-    // if the custom code is not 20000, it is judged as an error.
-    if (res.code !== 20000) {
+    // if the custom code is not 200, it is judged as an error.
+    if (res.code !== 200) {
       Message({
         message: res.message || 'error',
         type: 'error',
         duration: 5 * 1000
       })
 
-      // 50008: Illegal token; 50012: Other clients logged in; 50014: Token expired;
-      if (res.code === 50008 || res.code === 50012 || res.code === 50014) {
+      // 508: Illegal token; 512: Other clients logged in; 514: Token expired;
+      if (res.code === 508 || res.code === 512 || res.code === 514) {
         // to re-login
         MessageBox.confirm('You have been logged out, you can cancel to stay on this page, or log in again', 'Confirm logout', {
           confirmButtonText: 'Re-Login',

@@ -90,6 +90,12 @@ export const constantRoutes = [
         meta: { title: '用户管理', icon: 'table' }
       },
       {
+        path: 'sysPower',
+        name: 'Power',
+        component: () => import('@/views/sysPower/index'),
+        meta: { title: '权限管理', icon: 'table' }
+      },
+      {
         path: 'tree',
         name: 'Tree',
         component: () => import('@/views/tree/index'),
