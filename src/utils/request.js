@@ -21,6 +21,7 @@ service.interceptors.request.use(
     }else{
       config.url = config.url + ("?client_name=jwt")
     }
+
     if (store.getters.token) {
       // let each request carry token
       // ['X-Token'] is a custom headers key
