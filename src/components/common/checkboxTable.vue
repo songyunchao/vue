@@ -1,11 +1,11 @@
 <template>
   <div>
     <div style="width:100%;">
-      <div class="clearfix" style="margin:20px;">
+      <div class="clearfix" style="margin:10px;">
         <el-row>
           <el-col v-for="(item,index) in tabledata.searchParams" :key="index" :span="6">
             <el-col style="line-height: 40px;" :span="6">{{ item.name }}</el-col>
-            <el-col :span="12">
+            <el-col :span="15">
               <el-input
                 v-model="item.value"
                 placeholder=""
@@ -34,7 +34,13 @@
         @selection-change="handleCurrentChange"
       >
         <!--多选  prop要填唯一标识-->
-        <el-table-column label="选择" :reserve-selection="true" prop="uuid" width="32px" type="selection" />
+        <el-table-column label="选择" :reserve-selection="true" prop="uuid" width="32" type="selection" />
+        <el-table-column
+          width="50"
+          label=""
+          type="index"
+          :index="indexMethod">
+        </el-table-column>
         <!--循环输出表头-->
         <el-table-column
           v-for="(value, key) in tableHeader"
@@ -48,7 +54,7 @@
           </template>
         </el-table-column>
         <!--定义操作功能-->
-        <el-table-column width="150px" label="操作">
+        <el-table-column width="302" label="操作">
           <template slot-scope="scope">
             <span>
               <el-button type="primary " size="mini" plain @click="editline(scope.row)">修改</el-button>
@@ -165,6 +171,9 @@ export default {
     }
   },
   methods: {
+    indexMethod(index) {
+      return (this.tabledata.pageInfo.pageIndex - 1) * this.tabledata.pageInfo.pageSize + index + 1;
+    },
     // 确定选中
     handleCurrentChange(rows) {
       console.log(rows)

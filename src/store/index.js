@@ -8,6 +8,9 @@ import user from './modules/user'
 Vue.use(Vuex)
 
 const store = new Vuex.Store({
+  state: {
+    bodyHeight: document.body.clientHeight
+  },
   modules: {
     app,
     settings,

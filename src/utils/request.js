@@ -16,10 +16,16 @@ service.interceptors.request.use(
     // do something before request is sent
     if(config.url=='/user/login'){
       config.url = config.url + ("?client_name=rest&username="+  config.data.username +"&password="+ config.data.password)
-    }else if (config.url=='/user/logout'){
+    }else if (config.url=='/user/logout' || config.url=='/user/info'){
       config.url = config.url + ("?client_name=jwt")
     }else{
-      config.url = config.url + ("?client_name=jwt")
+      const urls = config.url.split("?")
+      if(urls.length=2){
+        config.url = urls[0] + ("?client_name=jwt&token="+ getToken() +"&")+ urls[1]
+      }else{
+        config.url = config.url + ("?client_name=jwt&token="+ getToken())
+      }
+
     }
 
     if (store.getters.token) {

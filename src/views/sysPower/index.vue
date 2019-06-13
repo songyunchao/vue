@@ -50,12 +50,12 @@ export default {
   },
   methods: {
     // 处理表格数据
-    dealTableData(rows) {
+    dealTableData(rows, total) {
       // 赋值列表
-      this.tableData.lineItems = rows
+      this.tableData.lineItems.items = rows
+      this.tableData.lineItems.totalCount = total
       // 创建表头名称
       this.tableData.table.header = {
-        'id': 'ID',
         'name': '名称',
         'code': '编码',
         'url': '地址'
@@ -66,9 +66,10 @@ export default {
       ]
     },
     getTableData() {
-      debugger
-      const resultData = sysPower.findPage(this.tableData.pageInfo, this.tableData.searchParams)
-      this.dealTableData(resultData)
+      sysPower.findPage(this.tableData.pageInfo, this.tableData.searchParams).then(response => {
+        const { rows, total} = response
+        this.dealTableData(rows, total)
+      })
     },
     // 分页器，记录页码，请求对应页码数据
     pageChange(num) {

@@ -24,7 +24,7 @@ export function logout(token) {
   })
 }
 
-/*获取用户信息*/
+/* 获取用户信息 */
 export function getUserList(page, size, searchMap) {
   return request({
     url: `/user/list/${page}/${size}`,
@@ -33,7 +33,7 @@ export function getUserList(page, size, searchMap) {
   })
 }
 
-/*新增用户信息*/
+/* 新增用户信息 */
 export function addUser(data) {
   return request({
     url: `/user/add`,
@@ -41,5 +41,3 @@ export function addUser(data) {
     data: data
   })
 }
-
-
