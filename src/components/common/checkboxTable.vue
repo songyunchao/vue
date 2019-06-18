@@ -4,8 +4,8 @@
       <div class="clearfix" style="margin:10px;">
         <el-row>
           <el-col v-for="(item,index) in tabledata.searchParams" :key="index" :span="6">
-            <el-col style="line-height: 40px;" :span="6">{{ item.name }}</el-col>
-            <el-col :span="15">
+            <el-col style="line-height: 36px;" :pull="8">{{ item.name }}</el-col>
+            <el-col :span="16">
               <el-input
                 v-model="item.value"
                 placeholder=""
@@ -30,7 +30,9 @@
         :height="(this.$store.state.bodyHeight-150)"
         :reserve-selection="true"
         :data="tabledata.lineItems.items"
-        style="width: 100%"
+        style="width: 100%;"
+        :row-style="{height:'36px'}"
+        :cell-style="{padding:'5px 0px'}"
         @selection-change="handleCurrentChange"
       >
         <!--多选  prop要填唯一标识-->
@@ -194,7 +196,7 @@ export default {
       const f = 16 // 每个字大小，其实是每个字的比例值，大概会比字体大小差不多大一点，
       column.minWidth = f * l // 字大小乘个数即长度 ,注意不要加px像素，这里minWidth只是一个比例值，不是真正的长度
       // 然后将列标题放在一个div块中，注意块的宽度一定要100%，否则表格显示不完全
-      return h('div', { class: 'table-head', style: { width: '100%' }}, [column.label])
+      return h('div', { class: 'table-head', style: { width: '100%',height:"60%",fontSize:"14px" }}, [column.label])
     },
     // 行项目分页
     pageChange(val) {
@@ -203,12 +205,13 @@ export default {
     },
     // 新建行项目
     createInfor() {
+      alert(312321325555);
       // 生成uuid
-      this.form.uuid = UUID.v1()
+      //this.form.uuid = UUID.v1()
       // 打开新建弹窗
-      this.tabledata.dialogTableVisible = true
+      //this.tabledata.dialogTableVisible = true
       // 标识为新建
-      this.type = 'createInfor'
+      //this.type = 'createInfor'
     },
     // 修改行项目
     editline(details) {
@@ -228,6 +231,7 @@ export default {
     },
     // 查询
     Search() {
+      alert("44444")
       // 将查询的value传回
       this.$emit('Search', this.tabledata.searchParams)
     },
