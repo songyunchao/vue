@@ -31,27 +31,14 @@
 
       <template v-for="(column,index) in tableHeader">
         <el-table-column
-          v-if="!column.tp"
           :key="index"
           :label="column.label"
           :prop="column.prop"
           :width="column.width"
           :align="column.align"
           :sortable="column.sortable"
+          :formatter="column.formatter"
         />
-        <el-table-column
-          v-else
-          :key="index"
-          :prop="column.prop"
-          :label="column.label"
-          :width="column.width"
-          :align="column.align"
-          :sortable="column.sortable"
-        >
-          <template slot-scope="scope">
-            {{ column.formatter(scope.row, column) }}
-          </template>
-        </el-table-column>
       </template>
     </el-table>
 

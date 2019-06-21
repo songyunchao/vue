@@ -155,10 +155,10 @@ export default {
       this.tableData.lineItems.totalCount = total
       // 创建表头名称
       this.tableData.table.header = [
-        { 'label': '名称', 'prop': 'name', 'width': '150', 'align': 'center', 'sortable': 'true', 'tp': false },
-        { 'label': '编码', 'prop': 'code', 'width': '180', 'align': 'center', 'sortable': 'true', 'tp': false },
-        { 'label': '地址', 'prop': 'url', 'width': '240', 'align': 'center', 'sortable': 'true', 'tp': false },
-        { 'label': '所属模块', 'prop': 'menuId', 'align': 'center', 'sortable': 'true', 'tp': true,
+        { 'label': '名称', 'prop': 'name', 'width': '150', 'align': 'center', 'sortable': 'true' },
+        { 'label': '编码', 'prop': 'code', 'width': '180', 'align': 'center', 'sortable': 'true' },
+        { 'label': '地址', 'prop': 'url', 'width': '240', 'align': 'center', 'sortable': 'true' },
+        { 'label': '所属模块', 'prop': 'menuId', 'align': 'center', 'sortable': 'true',
           'formatter': row => row.menuName
         }
       ]
