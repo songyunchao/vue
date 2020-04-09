@@ -10,12 +10,12 @@
               <el-input
                 v-model="item.value"
                 :placeholder="item.placeholder"
-                @keyup.enter.native="Search()"
+                @keyup.enter.native="search()"
               />
             </el-col>
           </el-col>
           <el-col :span="6">
-            <el-button @click="Search()">查询</el-button>
+            <el-button @click="search()">查询</el-button>
           </el-col>
         </el-row>
       </div>
@@ -23,17 +23,18 @@
       <!-- toolbar -->
       <div class="clearfix" style="padding:4px;border-top:1px solid #EBEEF5;">
         <el-row>
-          <el-button size="small" type="info" plain @click="createInfor()">新增</el-button>
-          <el-button size="small" type="info" plain @click="batchDelete()">批量删除</el-button>
-          <el-button size="small" type="info" plain @click="refresh()">刷新</el-button>
+          <el-button size="small" style="margin-left: 0px;" type="primary" icon="el-icon-circle-plus-outline" @click="create()">新增</el-button>
+          <el-button size="small" style="margin-left: 0px;" type="success" icon="el-icon-delete" @click="deleteRows()">批量删除</el-button>
+          <el-button size="small" style="margin-left: 0px;" type="warning" icon="el-icon-refresh" @click="refresh()">刷新</el-button>
         </el-row>
       </div>
 
       <Datagrid
+        ref="myDatagrid"
         :tabledata="tableData"
-        @Search="Search"
-        @editline="editline"
-        @deleteline="deleteline"
+        @search="search"
+        @edit="edit"
+        @deleteRow="deleteRow"
         @pageChange="pageChange"
         @handleSizeChange="handleSizeChange"
       />
@@ -49,11 +50,11 @@
           :label-width="formData.formLabelWidth"
           :rules="[
             { required: true, message: '编码不能为空'},
-            { type: 'number', message: '编码必须为字母、下划线、字母'}
+            { type: 'number', message: '编码必须为字母、下划线、数字'}
           ]"
-        >
-          <el-input v-model.number="formData.form.code" type="code" autocomplete="off" />
+        ><el-input v-model.number="formData.form.code" type="code" autocomplete="off" />
         </el-form-item>
+
         <el-form-item
           label="名称"
           :label-width="formData.formLabelWidth"
@@ -136,7 +137,7 @@ export default {
       type: '',
       form: {
         // 唯一标识
-        uuid: '',
+        id: '',
         name: '',
         code: '',
         url: '',
@@ -155,23 +156,29 @@ export default {
       this.tableData.lineItems.totalCount = total
       // 创建表头名称
       this.tableData.table.header = [
-        { 'label': '名称', 'prop': 'name', 'width': '150', 'align': 'center', 'sortable': 'true' },
-        { 'label': '编码', 'prop': 'code', 'width': '180', 'align': 'center', 'sortable': 'true' },
+        { 'label': '名称', 'prop': 'name', 'width': '180', 'align': 'center', 'sortable': 'true' },
+        { 'label': '编码', 'prop': 'code', 'width': '200', 'align': 'center', 'sortable': 'true' },
         { 'label': '地址', 'prop': 'url', 'width': '240', 'align': 'center', 'sortable': 'true' },
-        { 'label': '所属模块', 'prop': 'menuId', 'align': 'center', 'sortable': 'true',
+        { 'label': '所属模块', 'prop': 'menuId', 'width': '280', 'align': 'center', 'sortable': 'true',
           'formatter': row => row.menuName
         }
       ]
       // 搜索条件的key
       this.tableData.searchParams = [
-        { 'name': '关键字', 'id': 'q', 'value': '', 'placeholder': '名称、编码检索' },
-        { 'name': '关键字', 'id': 'q', 'value': '', 'placeholder': '名称、编码检索' }
+        { 'name': '关键字', 'id': 'q', 'value': '', 'field': 'q', 'placeholder': '名称、编码检索' }
       ]
     },
     getTableData() {
+      const loading = this.$loading({
+        lock: true,
+        text: '拼命加载中',
+        spinner: 'el-icon-loading',
+        background: 'rgba(0, 0, 0, 0.7)'
+      })
       sysPower.findPage(this.tableData.pageInfo, this.tableData.searchParams).then(response => {
         const { rows, total } = response
         this.dealTableData(rows, total)
+        loading.close()
       })
     },
     // 分页器，记录页码，请求对应页码数据
@@ -184,24 +191,54 @@ export default {
       this.tableData.pageInfo.pageIndex = 1
       this.getTableData()
     },
-    createInfor(details) {
-
+    create() {
+      this.formData.form = {}
+      this.formData.dialogTableVisible = true
+      // 标识为修改
+      this.formData.type = 'create'
     },
     // 查询条目
-    Search(e) {
+    search(e) {
+      this.getTableData()
+    },
+    // 刷新
+    refresh() {
+      this.tableData.searchParams.forEach(row => {
+        row.value = ''
+      })
       this.getTableData()
     },
     // 删除条目
-    deleteline(details) {
-      console.log(details, details._id)
+    deleteRow(details) {
+      console.log(details)
+    },
+    // 批量删除
+    deleteRows() {
+      const rows = this.$refs.myDatagrid.getSelectedRows()
+      if (rows) {
+        rows.forEach(row => {
+          if (row) {
+            console.log(row)
+          }
+        })
+      }
     },
     // 修改条目
-    editline(details) {
+    edit(details) {
       // 赋值详情做展示用
-      this.formData.form = details
-      this.formData.dialogTableVisible = true
-      // 标识为修改
-      this.formData.type = 'editline'
+      sysPower.load(details.id).then(response => {
+        if (response != null && response.status) {
+          this.formData.form = response.entry
+          this.formData.dialogTableVisible = true
+          // 标识为修改
+          this.formData.type = 'edit'
+        } else {
+          this.$message({
+            message: response.message,
+            type: 'warning'
+          })
+        }
+      })
     }
   }
 }

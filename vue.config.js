@@ -37,7 +37,7 @@ module.exports = {
       // target: `https://easy-mock.com/mock/5ccf954b2b501c404c540949/wfz`,
       // target: `http://localhost:${port}/mock`,
       [process.env.VUE_APP_BASE_API]: {
-        target: `http://10.10.23.124:8080/dev-api`,
+        target: `http://localhost:8080/dev-api`,
         // target: `https://easy-mock.com/mock/5ccf954b2b501c404c540949/wfz`,
         changeOrigin: true,
         pathRewrite: {

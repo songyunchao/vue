@@ -3,8 +3,8 @@
     <!--引用表格-->
     <el-table
       ref="multipleTable"
-      border
       :row-key="getRowKeys"
+      border
       stripe
       :reserve-selection="true"
       :data="tabledata.lineItems.items"
@@ -12,19 +12,19 @@
       :fit="true"
       :height="tableHeight"
       :row-style="{height:'36px'}"
-      :cell-style="{padding:'5px 0px'}"
+      :cell-style="{padding:'1px 0px'}"
       @selection-change="handleCurrentChange"
     >
       <!--多选  prop要填唯一标识-->
-      <el-table-column label="选择" :reserve-selection="true" prop="uuid" width="32" type="selection" />
-      <el-table-column width="50" label="" type="index" :index="indexMethod" fixed="left" />
+      <el-table-column label="选择" :reserve-selection="true" prop="id" width="42" type="selection" />
+      <el-table-column label="" type="index" :index="indexMethod" fixed="left" />
 
       <!--定义操作功能-->
-      <el-table-column width="202" label="操作" prop="operate" fixed="left">
+      <el-table-column width="150" label="操作" prop="operate" fixed="left">
         <template slot-scope="scope">
           <span>
-            <el-button type="primary " size="mini" plain @click="editline(scope.row)">修改</el-button>
-            <el-button type="danger " size="mini" plain @click="deleteline(scope.row)">删除</el-button>
+            <el-button type="primary " size="mini" plain @click="edit(scope.row)">修改</el-button>
+            <el-button type="danger " size="mini" plain @click="deleteRow(scope.row)">删除</el-button>
           </span>
         </template>
       </el-table-column>
@@ -57,6 +57,17 @@
   </div>
 </template>
 
+<style>
+  .el-table__header tr, .el-table__header th {
+    padding: 0;
+    height: 36px;
+  }
+  .el-table__body tr, .el-table__body td {
+    padding: 0;
+    height: 34px;
+  }
+</style>
+
 <script>
 
 export default {
@@ -67,19 +78,17 @@ export default {
       required: true
     }
   },
-  data() {
-    return {
-      tableHeight: 100,
-      // 获取row的key值
-      getRowKeys(row) {
-        return row.uuid
-      },
-      // 存放分页选中条目,回显用
-      selectedData: [],
-      // 存放选中条目，做传参用
-      templateRadio: []
-    }
-  },
+  data: () => ({
+    tableHeight: '100%',
+    // 获取row的key值
+    getRowKeys(row) {
+      return row.id
+    },
+    // 存放分页选中条目,回显用
+    selectedData: [],
+    // 存放选中条目，做传参用
+    templateRadio: []
+  }),
   computed: {
     tableHeader() {
       if (!this.tabledata || !this.tabledata.table) {
@@ -119,7 +128,7 @@ export default {
       if (rows) {
         rows.forEach(row => {
           if (row) {
-            this.selectedData.push(row.uuid)
+            this.selectedData.push(row.id)
           }
         })
       }
@@ -133,9 +142,16 @@ export default {
       // 将页码大小传回父组件
       this.$emit('handleSizeChange', val)
     },
+    getSelectedRows() {
+      return this.templateRadio
+    },
     // 修改条目
-    editline(details) {
-      this.$emit('editline', details)
+    edit(details) {
+      this.$emit('edit', details)
+    },
+    // 删除
+    deleteRow(details) {
+      this.$emit('deleteRow', details)
     }
   }
 }

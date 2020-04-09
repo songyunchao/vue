@@ -2,13 +2,19 @@ import request from '@/utils/request'
 import tablePage from '@/utils/table-page'
 
 export default {
-  /*获取权限分页列表*/
-  findPage(pageParams, searchParamsMap) {
-    const params = tablePage.initPageParams(pageParams);
+  findPage(pageParams, searchFormParams) {
+    const params = tablePage.initPageParams(pageParams)
     return request({
       method: 'POST',
       url: `/sys/power/findPage?${params}`,
-      data: searchParamsMap
+      data: tablePage.initSearchFormParams(searchFormParams)
+    })
+  },
+  load(id) {
+    return request({
+      method: 'GET',
+      url: `/sys/power/` + id,
+      data: {}
     })
   }
 }
