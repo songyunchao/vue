@@ -16,14 +16,14 @@
       @selection-change="handleCurrentChange"
     >
       <!--多选  prop要填唯一标识-->
-      <el-table-column label="选择" :reserve-selection="true" prop="id" width="42" type="selection" />
-      <el-table-column label="" type="index" :index="indexMethod" fixed="left" />
+      <el-table-column label="选择" :reserve-selection="true" prop="id" width="42" type="selection" fixed="left"/>
+      <el-table-column label="" type="index" :index="indexMethod" />
 
       <!--定义操作功能-->
-      <el-table-column width="150" label="操作" prop="operate" fixed="left">
-        <template slot-scope="scope">
+      <el-table-column width="160" label="操作" align="center" prop="operate" fixed="right">
+        <template slot-scope="scope" >
           <span>
-            <el-button type="primary " size="mini" plain @click="edit(scope.row)">修改</el-button>
+            <el-button type="primary" size="mini" plain @click="edit(scope.row)">修改</el-button>
             <el-button type="danger " size="mini" plain @click="deleteRow(scope.row)">删除</el-button>
           </span>
         </template>
@@ -40,6 +40,9 @@
           :formatter="column.formatter"
         />
       </template>
+
+
+
     </el-table>
 
     <!--分页器-->
@@ -65,7 +68,9 @@
   .el-table__body tr, .el-table__body td {
     padding: 0;
     height: 34px;
+    font-size: 13px;
   }
+
 </style>
 
 <script>

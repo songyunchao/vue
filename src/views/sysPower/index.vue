@@ -159,7 +159,7 @@ export default {
         { 'label': '名称', 'prop': 'name', 'width': '180', 'align': 'center', 'sortable': 'true' },
         { 'label': '编码', 'prop': 'code', 'width': '200', 'align': 'center', 'sortable': 'true' },
         { 'label': '地址', 'prop': 'url', 'width': '240', 'align': 'center', 'sortable': 'true' },
-        { 'label': '所属模块', 'prop': 'menuId', 'width': '280', 'align': 'center', 'sortable': 'true',
+        { 'label': '所属模块', 'prop': 'menuId', 'align': 'center', 'sortable': 'true',
           'formatter': row => row.menuName
         }
       ]
